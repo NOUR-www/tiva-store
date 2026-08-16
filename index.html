@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<title>TiVA Store | شحن ألماس Mobile Legends</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Almarai:wght@400;700;800&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#050508;
+  --bg-2:#0f0709;
+  --card:rgba(20, 10, 13, 0.75);
+  --card-line:rgba(226,16,31,0.25);
+  --red:#e2101f;
+  --red-2:#ff3b4a;
+  --red-glow:rgba(255, 59, 74, 0.5);
+  --red-deep:#4a050b;
+  --silver:#f1f2f5;
+  --silver-dim:#a0a6b1;
+  --gold:#ffd700;
+  --gold-glow:rgba(255, 215, 0, 0.4);
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--bg);
+  color:var(--silver);
+  font-family:'Almarai', sans-serif;
+  overflow-x:hidden;
+  position:relative;
+}
+::selection { background: var(--red); color: #fff; }
+.num, .eng{font-family:'Rajdhani',sans-serif;}
+
+/* ---------- background texture ---------- */
+.bg-noise{
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(circle 600px at 50% 10%, rgba(226,16,31,0.22), transparent 70%),
+    radial-gradient(ellipse 900px 600px at 15% 80%, rgba(226,16,31,0.12), transparent 60%),
+    radial-gradient(ellipse 800px 500px at 85% 40%, rgba(226,16,31,0.15), transparent 60%);
+}
+
+/* ---------- LOADER ---------- */
+#loader{
+  position:fixed;inset:0;z-index:9999;
+  background:#040405;
+  display:flex;align-items:center;justify-content:center;
+  transition:opacity .7s ease, visibility .7s ease;
+}
+#loader.hide{opacity:0;visibility:hidden;}
+.loader-stage{
+  position:relative;
+  width:clamp(160px, 40vw, 220px);
+  height:clamp(160px, 40vw, 220px);
+  display:flex;align-items:center;justify-content:center;
+}
+.loader-ring{
+  position:absolute;inset:0;
+  border-radius:50%;
+  border:2px solid transparent;
+  border-top-color:var(--red);
+  border-right-color:var(--red-2);
+  animation:spin 1.2s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
+  filter:drop-shadow(0 0 12px var(--red-glow));
+}
+.loader-ring.r2{
+  inset:16px;
+  border-top-color:transparent;
+  border-bottom-color:var(--red-2);
+  border-left-color:var(--red);
+  animation:spin 1.8s linear infinite reverse;
+  opacity:.8;
+}
+.loader-logo{
+  font-family:'Rajdhani',sans-serif;
+  font-weight:700;
+  font-size:clamp(1.8rem, 5vw, 2.4rem);
+  letter-spacing:3px;
+  color:var(--silver);
+  text-shadow:0 0 20px rgba(226,16,31,0.9);
+  animation:pulse-text 1.4s ease-in-out infinite;
+}
+.loader-logo span{color:var(--red-2);}
+.loader-pct{
+  position:absolute;
+  bottom:-38px;
+  font-family:'Rajdhani',sans-serif;
+  font-size:.9rem;
+  letter-spacing:4px;
+  color:var(--silver-dim);
+}
+@keyframes spin{to{transform:rotate(360deg);}}
+@keyframes pulse-text{0%,100%{opacity:1;}50%{opacity:.4;}}
+
+/* ---------- HEADER ---------- */
+header{
+  position:sticky;top:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 5%;
+  border-bottom:1px solid var(--card-line);
+  background:rgba(5, 5, 8, 0.85);
+  backdrop-filter:blur(12px);
+}
+.brand{display:flex;align-items:center;gap:10px;}
+.brand-mark{
+  width:36px;height:36px;
+  position:relative;
+  filter:drop-shadow(0 0 10px rgba(226,16,31,.8));
+}
+.brand-mark svg{width:100%;height:100%;}
+.brand-name{
+  font-family:'Rajdhani',sans-serif;
+  font-weight:700;font-size:clamp(1.2rem, 4vw, 1.45rem);letter-spacing:1px;color:var(--silver);
+}
+.brand-name span{color:var(--red-2);}
+.header-badge{
+  font-size:.72rem;
+  letter-spacing:1.5px;
+  color:var(--silver-dim);
+  border:1px solid var(--card-line);
+  background:rgba(226,16,31,0.05);
+  padding:6px 14px;border-radius:30px;
+  font-family:'Rajdhani',sans-serif;
+  box-shadow:inset 0 0 10px rgba(226,16,31,0.1);
+}
+
+/* ---------- HERO ---------- */
+.hero{
+  position:relative;z-index:2;
+  text-align:center;
+  padding: clamp(40px, 8vw, 80px) 5% 40px;
+}
+.hero-ring-wrap{
+  position:relative;
+  width:clamp(130px, 35vw, 180px);
+  height:clamp(130px, 35vw, 180px);
+  margin:0 auto 24px;
+}
+.hero-ring{
+  position:absolute;inset:0;border-radius:50%;
+  border:2px solid var(--red);
+  box-shadow:0 0 25px var(--red-glow), inset 0 0 15px var(--red-glow);
+  animation:spin 12s linear infinite;
+}
+.hero-ring::before,.hero-ring::after{
+  content:"";position:absolute;width:8px;height:8px;border-radius:50%;
+  background:var(--red-2);box-shadow:0 0 12px 4px rgba(255,59,74,1);
+}
+.hero-ring::before{top:-4px;left:50%;transform:translateX(-50%);}
+.hero-ring::after{bottom:-4px;right:20%;}
+
+.hero-diamond{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+}
+.hero-logo-img{
+  width:clamp(90px, 25vw, 130px);
+  height:clamp(90px, 25vw, 130px);
+  object-fit:cover;
+  border-radius:50%;
+  border:2px solid rgba(255, 59, 74, 0.4);
+  filter:drop-shadow(0 0 25px rgba(226,16,31,0.9));
+  animation:float 3.5s ease-in-out infinite;
+}
+@keyframes float{
+  0%,100%{transform:translateY(0) scale(1);}
+  50%{transform:translateY(-8px) scale(1.02);}
+}
+
+.hero h1{
+  font-family:'Rajdhani',sans-serif;
+  font-weight:700;
+  font-size:clamp(1.8rem, 6vw, 4.2rem);
+  letter-spacing:1px;
+  color:var(--silver);
+  text-shadow:0 0 35px rgba(226,16,31,.5);
+  line-height:1.2;
+}
+.hero h1 span{
+  background:linear-gradient(135deg, #fff, var(--red-2));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+.hero p.tag{
+  margin-top:12px;
+  font-size:clamp(0.9rem, 2.5vw, 1.1rem);
+  color:var(--silver-dim);
+  font-weight:700;
+  padding:0 10px;
+}
+.hero-cta{
+  margin-top:28px;
+  display:flex;gap:12px;justify-content:center;flex-wrap:wrap;
+}
+.btn{
+  font-family:'Almarai',sans-serif;
+  font-weight:700;
+  font-size:clamp(0.88rem, 2.5vw, 1rem);
+  padding:13px 28px;
+  border-radius:10px;
+  text-decoration:none;
+  display:inline-flex;align-items:center;justify-content:center;
+  gap:8px;
+  transition:all .3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  position:relative;
+  overflow:hidden;
+  width:auto;
+}
+.btn-primary{
+  background:linear-gradient(135deg,var(--red),var(--red-deep));
+  color:#fff;
+  border:1px solid var(--red-2);
+  box-shadow:0 8px 25px -5px rgba(226,16,31,.7);
+}
+.btn-primary:active, .btn-primary:hover{
+  transform:translateY(-3px) scale(1.02);
+  box-shadow:0 15px 35px -5px rgba(226,16,31,0.9);
+}
+.btn-ghost{
+  background:rgba(20, 10, 13, 0.6);
+  border:1.5px solid var(--card-line);
+  color:var(--silver);
+  backdrop-filter:blur(5px);
+}
+.btn-ghost:active, .btn-ghost:hover{
+  border-color:var(--red-2);
+  transform:translateY(-3px);
+  box-shadow:0 10px 25px -8px rgba(226,16,31,0.5);
+  color:#fff;
+}
+
+/* ---------- SECTION TITLES ---------- */
+.section{position:relative;z-index:2;padding:40px 5%;max-width:1200px;margin:0 auto;}
+.section-head{text-align:center;margin-bottom:32px;}
+.section-eyebrow{
+  font-family:'Rajdhani',sans-serif;
+  letter-spacing:3px;font-size:.8rem;color:var(--red-2);font-weight:700;
+  text-transform:uppercase;
+}
+.section-title{
+  font-family:'Rajdhani',sans-serif;
+  font-size:clamp(1.6rem, 5vw, 2.8rem);
+  font-weight:700;color:var(--silver);margin-top:4px;
+  text-shadow:0 0 20px rgba(0,0,0,0.8);
+}
+
+/* ---------- WEEKLY PASS ---------- */
+.pass-card{
+  max-width:680px;margin:0 auto 40px;
+  display:flex;align-items:center;justify-content:space-between;
+  gap:16px;
+  background:linear-gradient(135deg, rgba(226,16,31,.22), rgba(20,10,13,.85));
+  border:1.5px solid var(--red);
+  border-radius:16px;
+  padding:20px 24px;
+  box-shadow:0 10px 40px -10px rgba(226,16,31,.6);
+  backdrop-filter:blur(10px);
+  transition:transform .3s ease, box-shadow .3s ease;
+  opacity:0;transform:translateY(20px);
+  cursor:pointer;
+  text-decoration:none;
+}
+.pass-card.in{opacity:1;transform:translateY(0);}
+.pass-card:active, .pass-card:hover{
+  transform:translateY(-4px) scale(1.01);
+  box-shadow:0 20px 50px -10px rgba(226,16,31,.8);
+}
+.pass-left{display:flex;align-items:center;gap:12px;}
+.pass-left svg{width:38px;height:38px;flex-shrink:0;filter:drop-shadow(0 0 12px rgba(226,16,31,0.9));}
+.pass-title{font-weight:800;font-size:clamp(1rem, 3vw, 1.2rem);color:var(--silver);}
+.pass-sub{font-size:.8rem;color:var(--silver-dim);margin-top:2px;}
+.pass-price{
+  font-family:'Rajdhani',sans-serif;font-weight:700;font-size:clamp(1.8rem, 5vw, 2.3rem);color:var(--red-2);
+  text-shadow:0 0 20px rgba(226,16,31,.8);
+  white-space:nowrap;
+}
+.pass-price span{font-size:.9rem;color:var(--silver-dim);margin-right:4px;}
+
+/* ---------- PRICE GRID ---------- */
+.price-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill, minmax(140px, 1fr));
+  gap:12px;
+}
+@media(min-width:480px){
+  .price-grid{ grid-template-columns:repeat(auto-fill, minmax(200px, 1fr)); gap:16px; }
+}
+@media(min-width:768px){
+  .price-grid{ grid-template-columns:repeat(auto-fill, minmax(240px, 1fr)); gap:20px; }
+}
+
+.price-card{
+  display:flex;align-items:center;justify-content:space-between;
+  background:var(--card);
+  border:1px solid var(--card-line);
+  border-radius:12px;
+  padding:16px 14px;
+  position:relative;overflow:hidden;
+  backdrop-filter:blur(10px);
+  opacity:0;transform:translateY(20px);
+  transition:all .3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  cursor:pointer;
+  text-decoration:none;
+}
+.price-card.in{opacity:1;transform:translateY(0);}
+.price-card::before{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(90deg,transparent,rgba(255,59,74,0.15),transparent);
+  transform:translateX(-100%);
+  transition:transform .7s ease;
+}
+.price-card:hover::before{transform:translateX(100%);}
+.price-card:active, .price-card:hover{
+  border-color:var(--red-2);
+  transform:translateY(-4px);
+  box-shadow:0 12px 30px -8px var(--red-glow);
+  background:rgba(28, 13, 17, 0.85);
+}
+.price-left{display:flex;align-items:center;gap:8px;}
+.price-left svg{width:22px;height:22px;flex-shrink:0;filter:drop-shadow(0 0 8px rgba(226,16,31,.8));}
+.price-amount{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:clamp(1.1rem, 3.5vw, 1.35rem);color:var(--silver);}
+.price-tag{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:clamp(1.1rem, 3.5vw, 1.35rem);color:var(--red-2);white-space:nowrap;}
+.price-tag span{font-size:.75rem;color:var(--silver-dim);margin-right:2px;}
+.best-badge{
+  position:absolute;top:0;left:0;
+  background:linear-gradient(135deg, #ffd700, #ffa500);
+  color:#1a0f00;font-size:.6rem;font-weight:800;
+  padding:3px 8px;border-radius:0 0 8px 0;
+  box-shadow:0 2px 10px rgba(255, 215, 0, 0.3);
+  letter-spacing:.3px;
+}
+
+/* ---------- PAYMENTS ---------- */
+.pay-strip{
+  display:flex;flex-wrap:wrap;gap:10px;justify-content:center;
+}
+.pay-chip{
+  display:flex;align-items:center;gap:8px;
+  background:var(--card);
+  border:1px solid var(--card-line);
+  padding:12px 18px;border-radius:10px;
+  font-weight:700;font-size:clamp(0.8rem, 2.5vw, 0.95rem);
+  backdrop-filter:blur(8px);
+  opacity:0;transform:translateY(15px);
+  transition:all .3s ease;
+}
+.pay-chip.in{opacity:1;transform:translateY(0);}
+.pay-chip:active, .pay-chip:hover{
+  border-color:var(--red);
+  transform:translateY(-3px);
+  box-shadow:0 8px 20px -5px rgba(226,16,31,0.4);
+}
+.pay-dot{width:8px;height:8px;border-radius:50%;background:var(--red-2);box-shadow:0 0 10px rgba(255,59,74,0.9);}
+
+/* ---------- CONTACT ---------- */
+.contact-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+  gap:12px;
+}
+@media(min-width:600px){
+  .contact-grid{ grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:20px; }
+}
+.contact-card{
+  background:var(--card);
+  border:1px solid var(--card-line);
+  border-radius:14px;
+  padding:20px 14px;
+  text-align:center;
+  text-decoration:none;
+  color:var(--silver);
+  backdrop-filter:blur(8px);
+  transition:all .3s ease;
+  opacity:0;transform:translateY(20px);
+}
+.contact-card.in{opacity:1;transform:translateY(0);}
+.contact-card:active, .contact-card:hover{
+  transform:translateY(-5px);
+  border-color:var(--red-2);
+  box-shadow:0 15px 35px -10px var(--red-glow);
+  background:rgba(28, 13, 17, 0.85);
+}
+.contact-icon{
+  width:42px;height:42px;margin:0 auto 12px;
+  display:flex;align-items:center;justify-content:center;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(226,16,31,.3),transparent 70%);
+  border:1px solid rgba(226,16,31,0.2);
+}
+.contact-icon svg{width:22px;height:22px;fill:var(--red-2);}
+.contact-label{font-weight:700;font-size:clamp(0.9rem, 2.5vw, 1.05rem);}
+.contact-sub{font-family:'Rajdhani',sans-serif;font-size:clamp(0.75rem, 2vw, 0.9rem);color:var(--silver-dim);margin-top:4px;word-break:break-all;}
+
+/* ---------- FOOTER ---------- */
+footer{
+  position:relative;z-index:2;
+  text-align:center;padding:30px 5% 24px;
+  border-top:1px solid var(--card-line);
+  color:var(--silver-dim);font-size:.8rem;
+  background:rgba(4, 4, 6, 0.8);
+}
+footer .foot-brand{font-family:'Rajdhani',sans-serif;color:var(--red-2);font-weight:700;font-size:1.1rem;letter-spacing:2px;}
+
+/* floating whatsapp */
+.float-wa{
+  position:fixed;bottom:20px;left:20px;z-index:50;
+  width:50px;height:50px;border-radius:50%;
+  background:linear-gradient(135deg,var(--red),var(--red-deep));
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 8px 25px -5px rgba(226,16,31,.8);
+  border:1px solid var(--red-2);
+  animation:float 3.5s ease-in-out infinite;
+  text-decoration:none;
+}
+.float-wa svg{width:24px;height:24px;fill:#fff;}
+
+/* ---------- MEDIA QUERIES FOR SMALL MOBILE ---------- */
+@media(max-width:480px){
+  header{padding:12px 4%;}
+  .header-badge{display:none;}
+  .hero-cta{flex-direction:column;width:100%;}
+  .btn{width:100%;}
+  .pass-card{padding:16px 18px;}
+  .float-wa{width:46px;height:46px;bottom:16px;left:16px;}
+}
+</style>
+</head>
+<body>
+
+<div class="bg-noise"></div>
+
+<!-- LOADER -->
+<div id="loader">
+  <div class="loader-stage">
+    <div class="loader-ring"></div>
+    <div class="loader-ring r2"></div>
+    <div class="loader-logo">TiV<span>A</span></div>
+    <div class="loader-pct" id="loaderPct">0%</div>
+  </div>
+</div>
+
+<!-- HEADER -->
+<header>
+  <div class="brand">
+    <div class="brand-mark">
+      <svg viewBox="0 0 24 24"><path d="M12 2l3 4-3 16-3-16 3-4z" fill="#e2101f"/><path d="M2 8h20l-10 12L2 8z" fill="none" stroke="#e2101f" stroke-width="1"/></svg>
+    </div>
+    <div class="brand-name">TiV<span>A</span> STORE</div>
+  </div>
+  <div class="header-badge eng">MOBILE LEGENDS · BANG BANG</div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-ring-wrap">
+    <div class="hero-ring"></div>
+    <div class="hero-diamond">
+      <img src="logo.png" alt="TiVA Logo" class="hero-logo-img">
+    </div>
+  </div>
+  <h1>شحـن <span>ألمـاس</span> Mobile Legends</h1>
+  <p class="tag">شحن أسهل .. تجربة أفضل — أسعار منافسة وتنفيذ فوري</p>
+  <div class="hero-cta">
+    <a class="btn btn-primary" href="https://wa.me/+201558371071" target="_blank">اطلب على واتساب</a>
+    <a class="btn btn-ghost" href="#prices">شوف الأسعار</a>
+  </div>
+</section>
+
+<!-- PRICES -->
+<section class="section" id="prices">
+  <div class="section-head">
+    <div class="section-eyebrow">PRICE LIST</div>
+    <div class="section-title">قائمة أسعار الدايموندز</div>
+  </div>
+
+  <a class="pass-card" id="passCard" href="https://wa.me/+201558371071?text=السلام%20علكم%20عاوز%20أشحن%20Weekly%20Diamond%20Pass%20بسعر%2080%20EGP" target="_blank">
+    <div class="pass-left">
+      <svg viewBox="0 0 24 24"><path d="M12 2l6 6-6 14-6-14 6-6z" fill="#e2101f"/><path d="M12 2l6 6h-12l6-6z" fill="#ff3b4a"/></svg>
+      <div>
+        <div class="pass-title">Weekly Diamond Pass</div>
+        <div class="pass-sub">باقة الألماس الأسبوعية</div>
+      </div>
+    </div>
+    <div class="pass-price">80<span>EGP</span></div>
+  </a>
+
+  <div class="price-grid" id="priceGrid">
+    <!-- cards injected by JS -->
+  </div>
+</section>
+
+<!-- PAYMENT METHODS -->
+<section class="section">
+  <div class="section-head">
+    <div class="section-eyebrow">PAYMENT METHODS</div>
+    <div class="section-title">طرق الدفع المتاحة</div>
+  </div>
+  <div class="pay-strip" id="payStrip">
+    <div class="pay-chip"><span class="pay-dot"></span>InstaPay</div>
+    <div class="pay-chip"><span class="pay-dot"></span>Vodafone Cash</div>
+    <div class="pay-chip"><span class="pay-dot"></span>Etisalat Cash</div>
+    <div class="pay-chip"><span class="pay-dot"></span>Fawry</div>
+    <div class="pay-chip"><span class="pay-dot"></span>Binance</div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="section">
+  <div class="section-head">
+    <div class="section-eyebrow">GET IN TOUCH</div>
+    <div class="section-title">تواصل معنا</div>
+  </div>
+  <div class="contact-grid" id="contactGrid">
+    <a class="contact-card" href="https://wa.me/+201558371071" target="_blank">
+      <div class="contact-icon"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18a8 8 0 0 1-4.1-1.1l-.3-.2-3 .8.8-2.9-.2-.3A8 8 0 1 1 12 20zm4.4-5.9c-.2-.1-1.4-.7-1.6-.8-.2-.1-.4-.1-.5.1-.2.2-.6.8-.7.9-.1.2-.3.2-.5.1-.2-.1-1-.4-1.9-1.2-.7-.6-1.2-1.4-1.3-1.6-.1-.2 0-.4.1-.5l.4-.5c.1-.1.1-.2.2-.4 0-.1 0-.3 0-.4-.1-.1-.5-1.3-.7-1.8-.2-.5-.4-.4-.5-.4h-.5c-.2 0-.4.1-.6.3-.2.2-.8.8-.8 1.9 0 1.1.8 2.2 1 2.3.1.2 1.6 2.4 3.8 3.4.5.2 1 .4 1.3.5.5.2 1 .1 1.4 0 .4-.1 1.4-.6 1.6-1.1.2-.5.2-1 .1-1.1z"/></svg></div>
+      <div class="contact-label">WhatsApp</div>
+      <div class="contact-sub eng">01558371071+</div>
+    </a>
+    <a class="contact-card" href="https://www.instagram.com/tiva_ko1?igsh=ZmU2bDc0NmdlZHlt&igsi=ZmU2bDc0NmdlZHlt" target="_blank">
+      <div class="contact-icon">
+        <svg viewBox="0 0 24 24">
+          <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+        </svg>
+      </div>
+      <div class="contact-label">Instagram</div>
+      <div class="contact-sub eng">tiva_ko1@</div>
+    </a>
+    <a class="contact-card" href="https://www.facebook.com/share/1PTpepNp9p/" target="_blank">
+      <div class="contact-icon"><svg viewBox="0 0 24 24"><path d="M14 22v-9h3l.5-3.5H14V7.2c0-1 .3-1.7 1.8-1.7H18V2.2C17.6 2.1 16.4 2 15 2c-3 0-5 1.8-5 5.1v2.4H7V13h3v9h4z"/></svg></div>
+      <div class="contact-label">Facebook</div>
+      <div class="contact-sub eng">TiVA Store</div>
+    </a>
+    <a class="contact-card" href="mailto:mohamedhosnyalshahd@gmail.com">
+      <div class="contact-icon"><svg viewBox="0 0 24 24"><path d="M2 5h20v14H2V5zm2 2v.01L12 13l8-5.99V7H4zm16 2.2l-7.4 5.5a1 1 0 0 1-1.2 0L4 9.2V17h16V9.2z"/></svg></div>
+      <div class="contact-label">Email</div>
+      <div class="contact-sub eng">mohamedhosnyalshahd@gmail.com</div>
+    </a>
+  </div>
+</section>
+
+<a class="float-wa" href="https://wa.me/+201558371071" target="_blank" aria-label="WhatsApp">
+  <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18a8 8 0 0 1-4.1-1.1l-.3-.2-3 .8.8-2.9-.2-.3A8 8 0 1 1 12 20zm4.4-5.9c-.2-.1-1.4-.7-1.6-.8-.2-.1-.4-.1-.5.1-.2.2-.6.8-.7.9-.1.2-.3.2-.5.1-.2-.1-1-.4-1.9-1.2-.7-.6-1.2-1.4-1.3-1.6-.1-.2 0-.4.1-.5l.4-.5c.1-.1.1-.2.2-.4 0-.1 0-.3 0-.4-.1-.1-.5-1.3-.7-1.8-.2-.5-.4-.4-.5-.4h-.5c-.2 0-.4.1-.6.3-.2.2-.8.8-.8 1.9 0 1.1.8 2.2 1 2.3.1.2 1.6 2.4 3.8 3.4.5.2 1 .4 1.3.5.5.2 1 .1 1.4 0 .4-.1 1.4-.6 1.6-1.1.2-.5.2-1 .1-1.1z"/></svg>
+</a>
+
+<footer>
+  <div class="foot-brand">TiVA STORE</div>
+  <p style="margin-top:8px;">© 2026 جميع الحقوق محفوظة — شحن ألعاب موبايل ليجندز</p>
+</footer>
+
+<script>
+// ---- price data ----
+const prices = [
+  {d:86, p:70},
+  {d:172, p:135},
+  {d:257, p:200},
+  {d:343, p:270},
+  {d:514, p:405},
+  {d:706, p:555},
+  {d:1050, p:820},
+  {d:1670, p:1290},
+  {d:2195, p:1650, best:true},
+  {d:4032, p:3005}
+];
+
+const phone = "+201558371071";
+const diamondSVG = `<svg viewBox="0 0 24 24"><path d="M12 2l6 6-6 14-6-14 6-6z" fill="#e2101f"/><path d="M12 2l6 6h-12l6-6z" fill="#ff3b4a"/></svg>`;
+
+const grid = document.getElementById('priceGrid');
+grid.innerHTML = prices.map(item => {
+  const msg = encodeURIComponent(`السلام عليكم، محتاج أشحن ${item.d.toLocaleString()} ألماس بسعر ${item.p.toLocaleString()} EGP`);
+  const waUrl = `https://wa.me/${phone}?text=${msg}`;
+  return `
+    <a class="price-card" href="${waUrl}" target="_blank">
+      ${item.best ? '<div class="best-badge">الأكثر طلبًا</div>' : ''}
+      <div class="price-left">
+        ${diamondSVG}
+        <div class="price-amount num">${item.d.toLocaleString()}</div>
+      </div>
+      <div class="price-tag num">${item.p.toLocaleString()}<span>EGP</span></div>
+    </a>
+  `;
+}).join('');
+
+// ---- reveal on scroll ----
+const revealTargets = document.querySelectorAll('.price-card, .pay-chip, .contact-card, .pass-card');
+const io = new IntersectionObserver((entries)=>{
+  entries.forEach((entry,i)=>{
+    if(entry.isIntersecting){
+      setTimeout(()=> entry.target.classList.add('in'), i*30);
+      io.unobserve(entry.target);
+    }
+  });
+},{threshold:.1});
+revealTargets.forEach(el=>io.observe(el));
+
+// ---- loader ----
+const loader = document.getElementById('loader');
+const pct = document.getElementById('loaderPct');
+let p = 0;
+const interval = setInterval(()=>{
+  p += Math.floor(Math.random()*12)+4;
+  if(p>=100){p=100; clearInterval(interval);}
+  pct.textContent = p + '%';
+},100);
+
+window.addEventListener('load', ()=>{
+  setTimeout(()=>{
+    loader.classList.add('hide');
+  }, 1000);
+});
+</script>
+<script>
+        // Anti-Inspect for Desktop Only
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+        document.addEventListener('contextmenu', function (e) {
+            e.preventDefault();
+        });
+
+        document.addEventListener('keydown', function (e) {
+            if (
+                e.key === 'F12' ||
+                (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j' || e.key === 'C' || e.key === 'c')) ||
+                (e.ctrlKey && (e.key === 'U' || e.key === 'u' || e.key === 'S' || e.key === 's'))
+            ) {
+                e.preventDefault();
+                return false;
+            }
+        });
+
+        if (!isMobile) {
+            setInterval(function () {
+                const threshold = 160;
+                const widthThreshold = window.outerWidth - window.innerWidth > threshold;
+                const heightThreshold = window.outerHeight - window.innerHeight > threshold;
+                
+                if (widthThreshold || heightThreshold) {
+                    document.body.innerHTML = '<h1 style="color:white; text-align:center; margin-top:20vh;">Inspect element is disabled on this website.</h1>';
+                }
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
