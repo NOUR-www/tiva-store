@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TiVA Store | لوحة التحكم الداشبورد</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@400;700;800&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg: #050508;
+      --card: rgba(20, 10, 13, 0.85);
+      --card-line: rgba(226, 16, 31, 0.25);
+      --red: #e2101f;
+      --red-2: #ff3b4a;
+      --red-glow: rgba(255, 59, 74, 0.4);
+      --silver: #f1f2f5;
+      --silver-dim: #a0a6b1;
+      --green: #22c55e;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      background: var(--bg);
+      color: var(--silver);
+      font-family: 'Almarai', sans-serif;
+      padding: 20px 5%;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--card-line);
+      margin-bottom: 30px;
+    }
+
+    .logo {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--silver);
+    }
+    .logo span { color: var(--red-2); }
+
+    .admin-title {
+      font-size: 1rem;
+      color: var(--silver-dim);
+      background: rgba(226, 16, 31, 0.1);
+      padding: 6px 14px;
+      border-radius: 20px;
+      border: 1px solid var(--card-line);
+    }
+
+    .panel-section {
+      background: var(--card);
+      border: 1px solid var(--card-line);
+      border-radius: 14px;
+      padding: 24px;
+      margin-bottom: 24px;
+      backdrop-filter: blur(10px);
+    }
+
+    h2 {
+      font-size: 1.2rem;
+      margin-bottom: 16px;
+      color: var(--red-2);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    label { font-size: 0.9rem; color: var(--silver-dim); }
+
+    input {
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid var(--card-line);
+      color: var(--silver);
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 1rem;
+      outline: none;
+      transition: border-color 0.3s;
+      width: 100%;
+    }
+
+    input:focus {
+      border-color: var(--red-2);
+    }
+
+    /* حقل كلمة السر مع العين */
+    .password-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .password-wrapper input {
+      padding-left: 45px;
+    }
+
+    .toggle-password-btn {
+      position: absolute;
+      left: 10px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      font-size: 1.2rem;
+      color: var(--silver-dim);
+      padding: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: color 0.2s;
+    }
+
+    .toggle-password-btn:hover {
+      color: var(--silver);
+    }
+
+    .prices-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .price-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr auto auto;
+      gap: 10px;
+      align-items: center;
+      background: rgba(0,0,0,0.2);
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .input-field-wrap {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--card-line);
+      border-radius: 8px;
+      padding: 0 10px;
+    }
+
+    .input-field-wrap span {
+      font-size: 1.1rem;
+    }
+
+    .input-field-wrap input {
+      border: none;
+      background: transparent;
+      padding: 10px 4px;
+    }
+
+    .btn {
+      font-family: 'Almarai', sans-serif;
+      font-weight: 700;
+      padding: 12px 20px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .btn-save {
+      background: linear-gradient(135deg, var(--red), #800000);
+      color: white;
+      width: 100%;
+      font-size: 1.05rem;
+      box-shadow: 0 4px 15px var(--red-glow);
+    }
+
+    .btn-save:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(255,59,74,0.6);
+    }
+
+    .btn-add {
+      background: rgba(226, 16, 31, 0.15);
+      color: var(--silver);
+      border: 1px dashed var(--red-2);
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    .btn-add:hover { background: rgba(226, 16, 31, 0.25); }
+
+    .btn-del {
+      background: #330000;
+      color: #ff4d4d;
+      border: 1px solid #660000;
+      padding: 10px 14px;
+    }
+
+    .btn-del:hover { background: #660000; color: white; }
+
+    .checkbox-label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.8rem;
+      color: var(--silver-dim);
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: var(--green);
+      color: black;
+      font-weight: 700;
+      padding: 12px 24px;
+      border-radius: 8px;
+      display: none;
+      box-shadow: 0 4px 15px rgba(34, 197, 94, 0.4);
+    }
+
+    @media(max-width: 600px) {
+      .price-row {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">TiV<span>A</span> STORE</div>
+  <div class="admin-title">لوحة التحكم بالأسعار والبيانات</div>
+</header>
+
+<!-- GENERAL SETTINGS -->
+<div class="panel-section">
+  <h2>إعدادات التواصل والتأكيدات</h2>
+  <div class="form-group">
+    <label>رقم الواتساب (شاملاً كود الدولة مثلاً: +201558371071)</label>
+    <input type="text" id="phoneInput" dir="ltr" placeholder="+201558371071">
+  </div>
+  <div class="form-group">
+    <label>سعر باقة Weekly Diamond Pass (EGP)</label>
+    <div class="input-field-wrap">
+      <span>💵</span>
+      <input type="number" id="passPriceInput" placeholder="80">
+    </div>
+  </div>
+</div>
+
+<!-- CHANGE PASSWORD SECTION -->
+<div class="panel-section">
+  <h2>أمان لوحة التحكم 🔒</h2>
+  <div class="form-group">
+    <label>كلمة السر الجديدة للوحة التحكم</label>
+    <div class="password-wrapper">
+      <input type="password" id="adminPassInput" placeholder="أدخل كلمة السر الجديدة">
+      <button type="button" class="toggle-password-btn" onclick="togglePasswordVisibility()" title="إظهار/إخفاء كلمة السر">👁️</button>
+    </div>
+  </div>
+</div>
+
+<!-- PRICES MANAGEMENT -->
+<div class="panel-section">
+  <h2>إدارة أسعار الألماس</h2>
+  <div class="prices-list" id="pricesContainer">
+    <!-- Rows injected dynamically -->
+  </div>
+  <button class="btn btn-add" onclick="addRow()">+ إضافة باقة جديدة</button>
+</div>
+
+<button class="btn btn-save" onclick="saveData()">حفظ التغيرات ونشرها على الموقع</button>
+
+<div class="toast" id="toast">تم حفظ البيانات بنجاح!</div>
+
+<script>
+  const defaultPrices = [
+    {d: 86, p: 70},
+    {d: 172, p: 135},
+    {d: 257, p: 200},
+    {d: 343, p: 270},
+    {d: 514, p: 405},
+    {d: 706, p: 555},
+    {d: 1050, p: 820},
+    {d: 1670, p: 1290},
+    {d: 2195, p: 1650, best: true},
+    {d: 4032, p: 3005}
+  ];
+
+  let prices = JSON.parse(localStorage.getItem('tiva_prices')) || defaultPrices;
+  let phone = localStorage.getItem('tiva_phone') || "+201558371071";
+  let passPrice = localStorage.getItem('tiva_pass_price') || 80;
+  let adminPassword = localStorage.getItem('tiva_admin_password') || "tiva123";
+
+  document.getElementById('phoneInput').value = phone;
+  document.getElementById('passPriceInput').value = passPrice;
+  document.getElementById('adminPassInput').value = adminPassword;
+
+  function togglePasswordVisibility() {
+    const input = document.getElementById('adminPassInput');
+    if (input.type === 'password') {
+      input.type = 'text';
+    } else {
+      input.type = 'password';
+    }
+  }
+
+  function renderRows() {
+    const container = document.getElementById('pricesContainer');
+    container.innerHTML = prices.map((item, index) => `
+      <div class="price-row">
+        <div class="input-field-wrap">
+          <span>💎</span>
+          <input type="number" placeholder="عدد الألماس" value="${item.d}" onchange="updateData(${index}, 'd', this.value)">
+        </div>
+        <div class="input-field-wrap">
+          <span>💵</span>
+          <input type="number" placeholder="السعر EGP" value="${item.p}" onchange="updateData(${index}, 'p', this.value)">
+        </div>
+        <label class="checkbox-label">
+          <input type="checkbox" ${item.best ? 'checked' : ''} onchange="updateData(${index}, 'best', this.checked)"> الأكثر طلبًا
+        </label>
+        <button class="btn btn-del" onclick="removeRow(${index})">حذف</button>
+      </div>
+    `).join('');
+  }
+
+  function updateData(index, key, value) {
+    if (key === 'best') {
+      prices[index].best = value;
+    } else {
+      prices[index][key] = Number(value);
+    }
+  }
+
+  function addRow() {
+    prices.push({d: 100, p: 100});
+    renderRows();
+  }
+
+  function removeRow(index) {
+    prices.splice(index, 1);
+    renderRows();
+  }
+
+  function saveData() {
+    const newPhone = document.getElementById('phoneInput').value.trim();
+    const newPassPrice = document.getElementById('passPriceInput').value;
+    const newAdminPass = document.getElementById('adminPassInput').value.trim();
+
+    if (newAdminPass !== "") {
+      localStorage.setItem('tiva_admin_password', newAdminPass);
+    }
+
+    localStorage.setItem('tiva_prices', JSON.stringify(prices));
+    localStorage.setItem('tiva_phone', newPhone);
+    localStorage.setItem('tiva_pass_price', newPassPrice);
+
+    const toast = document.getElementById('toast');
+    toast.style.display = 'block';
+    setTimeout(() => { toast.style.display = 'none'; }, 2500);
+  }
+
+  renderRows();
+</script>
+
+</body>
+</html>

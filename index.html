@@ -1,430 +1,742 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-<title>TiVA Store | شحن ألماس Mobile Legends</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Almarai:wght@400;700;800&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
-<style>
-:root{
-  --bg:#050508;
-  --bg-2:#0f0709;
-  --card:rgba(20, 10, 13, 0.75);
-  --card-line:rgba(226,16,31,0.25);
-  --red:#e2101f;
-  --red-2:#ff3b4a;
-  --red-glow:rgba(255, 59, 74, 0.5);
-  --red-deep:#4a050b;
-  --silver:#f1f2f5;
-  --silver-dim:#a0a6b1;
-  --gold:#ffd700;
-  --gold-glow:rgba(255, 215, 0, 0.4);
-}
-*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-html{scroll-behavior:smooth;}
-body{
-  background:var(--bg);
-  color:var(--silver);
-  font-family:'Almarai', sans-serif;
-  overflow-x:hidden;
-  position:relative;
-}
-::selection { background: var(--red); color: #fff; }
-.num, .eng{font-family:'Rajdhani',sans-serif;}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title>TiVA Store | شحن ألماس Mobile Legends</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@400;700;800&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg: #050508;
+      --bg-2: #0f0709;
+      --card: rgba(20, 10, 13, 0.75);
+      --card-line: rgba(226, 16, 31, 0.25);
+      --red: #e2101f;
+      --red-2: #ff3b4a;
+      --red-glow: rgba(255, 59, 74, 0.5);
+      --red-deep: #4a050b;
+      --silver: #f1f2f5;
+      --silver-dim: #a0a6b1;
+      --gold: #ffd700;
+      --gold-glow: rgba(255, 215, 0, 0.4);
+    }
 
-/* ---------- background texture ---------- */
-.bg-noise{
-  position:fixed;inset:0;z-index:0;pointer-events:none;
-  background:
-    radial-gradient(circle 600px at 50% 10%, rgba(226,16,31,0.22), transparent 70%),
-    radial-gradient(ellipse 900px 600px at 15% 80%, rgba(226,16,31,0.12), transparent 60%),
-    radial-gradient(ellipse 800px 500px at 85% 40%, rgba(226,16,31,0.15), transparent 60%);
-}
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
 
-/* ---------- LOADER ---------- */
-#loader{
-  position:fixed;inset:0;z-index:9999;
-  background:#040405;
-  display:flex;align-items:center;justify-content:center;
-  transition:opacity .7s ease, visibility .7s ease;
-}
-#loader.hide{opacity:0;visibility:hidden;}
-.loader-stage{
-  position:relative;
-  width:clamp(160px, 40vw, 220px);
-  height:clamp(160px, 40vw, 220px);
-  display:flex;align-items:center;justify-content:center;
-}
-.loader-ring{
-  position:absolute;inset:0;
-  border-radius:50%;
-  border:2px solid transparent;
-  border-top-color:var(--red);
-  border-right-color:var(--red-2);
-  animation:spin 1.2s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
-  filter:drop-shadow(0 0 12px var(--red-glow));
-}
-.loader-ring.r2{
-  inset:16px;
-  border-top-color:transparent;
-  border-bottom-color:var(--red-2);
-  border-left-color:var(--red);
-  animation:spin 1.8s linear infinite reverse;
-  opacity:.8;
-}
-.loader-logo{
-  font-family:'Rajdhani',sans-serif;
-  font-weight:700;
-  font-size:clamp(1.8rem, 5vw, 2.4rem);
-  letter-spacing:3px;
-  color:var(--silver);
-  text-shadow:0 0 20px rgba(226,16,31,0.9);
-  animation:pulse-text 1.4s ease-in-out infinite;
-}
-.loader-logo span{color:var(--red-2);}
-.loader-pct{
-  position:absolute;
-  bottom:-38px;
-  font-family:'Rajdhani',sans-serif;
-  font-size:.9rem;
-  letter-spacing:4px;
-  color:var(--silver-dim);
-}
-@keyframes spin{to{transform:rotate(360deg);}}
-@keyframes pulse-text{0%,100%{opacity:1;}50%{opacity:.4;}}
+    html {
+      scroll-behavior: smooth;
+    }
 
-/* ---------- HEADER ---------- */
-header{
-  position:sticky;top:0;z-index:100;
-  display:flex;align-items:center;justify-content:space-between;
-  padding:14px 5%;
-  border-bottom:1px solid var(--card-line);
-  background:rgba(5, 5, 8, 0.85);
-  backdrop-filter:blur(12px);
-}
-.brand{display:flex;align-items:center;gap:10px;}
-.brand-mark{
-  width:36px;height:36px;
-  position:relative;
-  filter:drop-shadow(0 0 10px rgba(226,16,31,.8));
-}
-.brand-mark svg{width:100%;height:100%;}
-.brand-name{
-  font-family:'Rajdhani',sans-serif;
-  font-weight:700;font-size:clamp(1.2rem, 4vw, 1.45rem);letter-spacing:1px;color:var(--silver);
-}
-.brand-name span{color:var(--red-2);}
-.header-badge{
-  font-size:.72rem;
-  letter-spacing:1.5px;
-  color:var(--silver-dim);
-  border:1px solid var(--card-line);
-  background:rgba(226,16,31,0.05);
-  padding:6px 14px;border-radius:30px;
-  font-family:'Rajdhani',sans-serif;
-  box-shadow:inset 0 0 10px rgba(226,16,31,0.1);
-}
+    body {
+      background: var(--bg);
+      color: var(--silver);
+      font-family: 'Almarai', sans-serif;
+      overflow-x: hidden;
+      position: relative;
+    }
 
-/* ---------- HERO ---------- */
-.hero{
-  position:relative;z-index:2;
-  text-align:center;
-  padding: clamp(40px, 8vw, 80px) 5% 40px;
-}
-.hero-ring-wrap{
-  position:relative;
-  width:clamp(130px, 35vw, 180px);
-  height:clamp(130px, 35vw, 180px);
-  margin:0 auto 24px;
-}
-.hero-ring{
-  position:absolute;inset:0;border-radius:50%;
-  border:2px solid var(--red);
-  box-shadow:0 0 25px var(--red-glow), inset 0 0 15px var(--red-glow);
-  animation:spin 12s linear infinite;
-}
-.hero-ring::before,.hero-ring::after{
-  content:"";position:absolute;width:8px;height:8px;border-radius:50%;
-  background:var(--red-2);box-shadow:0 0 12px 4px rgba(255,59,74,1);
-}
-.hero-ring::before{top:-4px;left:50%;transform:translateX(-50%);}
-.hero-ring::after{bottom:-4px;right:20%;}
+    ::selection {
+      background: var(--red);
+      color: #fff;
+    }
 
-.hero-diamond{
-  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
-}
-.hero-logo-img{
-  width:clamp(90px, 25vw, 130px);
-  height:clamp(90px, 25vw, 130px);
-  object-fit:cover;
-  border-radius:50%;
-  border:2px solid rgba(255, 59, 74, 0.4);
-  filter:drop-shadow(0 0 25px rgba(226,16,31,0.9));
-  animation:float 3.5s ease-in-out infinite;
-}
-@keyframes float{
-  0%,100%{transform:translateY(0) scale(1);}
-  50%{transform:translateY(-8px) scale(1.02);}
-}
+    .num, .eng {
+      font-family: 'Rajdhani', sans-serif;
+    }
 
-.hero h1{
-  font-family:'Rajdhani',sans-serif;
-  font-weight:700;
-  font-size:clamp(1.8rem, 6vw, 4.2rem);
-  letter-spacing:1px;
-  color:var(--silver);
-  text-shadow:0 0 35px rgba(226,16,31,.5);
-  line-height:1.2;
-}
-.hero h1 span{
-  background:linear-gradient(135deg, #fff, var(--red-2));
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-}
-.hero p.tag{
-  margin-top:12px;
-  font-size:clamp(0.9rem, 2.5vw, 1.1rem);
-  color:var(--silver-dim);
-  font-weight:700;
-  padding:0 10px;
-}
-.hero-cta{
-  margin-top:28px;
-  display:flex;gap:12px;justify-content:center;flex-wrap:wrap;
-}
-.btn{
-  font-family:'Almarai',sans-serif;
-  font-weight:700;
-  font-size:clamp(0.88rem, 2.5vw, 1rem);
-  padding:13px 28px;
-  border-radius:10px;
-  text-decoration:none;
-  display:inline-flex;align-items:center;justify-content:center;
-  gap:8px;
-  transition:all .3s cubic-bezier(0.25, 0.8, 0.25, 1);
-  position:relative;
-  overflow:hidden;
-  width:auto;
-}
-.btn-primary{
-  background:linear-gradient(135deg,var(--red),var(--red-deep));
-  color:#fff;
-  border:1px solid var(--red-2);
-  box-shadow:0 8px 25px -5px rgba(226,16,31,.7);
-}
-.btn-primary:active, .btn-primary:hover{
-  transform:translateY(-3px) scale(1.02);
-  box-shadow:0 15px 35px -5px rgba(226,16,31,0.9);
-}
-.btn-ghost{
-  background:rgba(20, 10, 13, 0.6);
-  border:1.5px solid var(--card-line);
-  color:var(--silver);
-  backdrop-filter:blur(5px);
-}
-.btn-ghost:active, .btn-ghost:hover{
-  border-color:var(--red-2);
-  transform:translateY(-3px);
-  box-shadow:0 10px 25px -8px rgba(226,16,31,0.5);
-  color:#fff;
-}
+    /* ---------- Background Texture ---------- */
+    .bg-noise {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(circle 600px at 50% 10%, rgba(226,16,31,0.22), transparent 70%),
+        radial-gradient(ellipse 900px 600px at 15% 80%, rgba(226,16,31,0.12), transparent 60%),
+        radial-gradient(ellipse 800px 500px at 85% 40%, rgba(226,16,31,0.15), transparent 60%);
+    }
 
-/* ---------- SECTION TITLES ---------- */
-.section{position:relative;z-index:2;padding:40px 5%;max-width:1200px;margin:0 auto;}
-.section-head{text-align:center;margin-bottom:32px;}
-.section-eyebrow{
-  font-family:'Rajdhani',sans-serif;
-  letter-spacing:3px;font-size:.8rem;color:var(--red-2);font-weight:700;
-  text-transform:uppercase;
-}
-.section-title{
-  font-family:'Rajdhani',sans-serif;
-  font-size:clamp(1.6rem, 5vw, 2.8rem);
-  font-weight:700;color:var(--silver);margin-top:4px;
-  text-shadow:0 0 20px rgba(0,0,0,0.8);
-}
+    /* ---------- Loader ---------- */
+    #loader {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: #040405;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.7s ease, visibility 0.7s ease;
+    }
 
-/* ---------- WEEKLY PASS ---------- */
-.pass-card{
-  max-width:680px;margin:0 auto 40px;
-  display:flex;align-items:center;justify-content:space-between;
-  gap:16px;
-  background:linear-gradient(135deg, rgba(226,16,31,.22), rgba(20,10,13,.85));
-  border:1.5px solid var(--red);
-  border-radius:16px;
-  padding:20px 24px;
-  box-shadow:0 10px 40px -10px rgba(226,16,31,.6);
-  backdrop-filter:blur(10px);
-  transition:transform .3s ease, box-shadow .3s ease;
-  opacity:0;transform:translateY(20px);
-  cursor:pointer;
-  text-decoration:none;
-}
-.pass-card.in{opacity:1;transform:translateY(0);}
-.pass-card:active, .pass-card:hover{
-  transform:translateY(-4px) scale(1.01);
-  box-shadow:0 20px 50px -10px rgba(226,16,31,.8);
-}
-.pass-left{display:flex;align-items:center;gap:12px;}
-.pass-left svg{width:38px;height:38px;flex-shrink:0;filter:drop-shadow(0 0 12px rgba(226,16,31,0.9));}
-.pass-title{font-weight:800;font-size:clamp(1rem, 3vw, 1.2rem);color:var(--silver);}
-.pass-sub{font-size:.8rem;color:var(--silver-dim);margin-top:2px;}
-.pass-price{
-  font-family:'Rajdhani',sans-serif;font-weight:700;font-size:clamp(1.8rem, 5vw, 2.3rem);color:var(--red-2);
-  text-shadow:0 0 20px rgba(226,16,31,.8);
-  white-space:nowrap;
-}
-.pass-price span{font-size:.9rem;color:var(--silver-dim);margin-right:4px;}
+    #loader.hide {
+      opacity: 0;
+      visibility: hidden;
+    }
 
-/* ---------- PRICE GRID ---------- */
-.price-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fill, minmax(140px, 1fr));
-  gap:12px;
-}
-@media(min-width:480px){
-  .price-grid{ grid-template-columns:repeat(auto-fill, minmax(200px, 1fr)); gap:16px; }
-}
-@media(min-width:768px){
-  .price-grid{ grid-template-columns:repeat(auto-fill, minmax(240px, 1fr)); gap:20px; }
-}
+    .loader-stage {
+      position: relative;
+      width: clamp(160px, 40vw, 220px);
+      height: clamp(160px, 40vw, 220px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
 
-.price-card{
-  display:flex;align-items:center;justify-content:space-between;
-  background:var(--card);
-  border:1px solid var(--card-line);
-  border-radius:12px;
-  padding:16px 14px;
-  position:relative;overflow:hidden;
-  backdrop-filter:blur(10px);
-  opacity:0;transform:translateY(20px);
-  transition:all .3s cubic-bezier(0.25, 0.8, 0.25, 1);
-  cursor:pointer;
-  text-decoration:none;
-}
-.price-card.in{opacity:1;transform:translateY(0);}
-.price-card::before{
-  content:"";position:absolute;inset:0;
-  background:linear-gradient(90deg,transparent,rgba(255,59,74,0.15),transparent);
-  transform:translateX(-100%);
-  transition:transform .7s ease;
-}
-.price-card:hover::before{transform:translateX(100%);}
-.price-card:active, .price-card:hover{
-  border-color:var(--red-2);
-  transform:translateY(-4px);
-  box-shadow:0 12px 30px -8px var(--red-glow);
-  background:rgba(28, 13, 17, 0.85);
-}
-.price-left{display:flex;align-items:center;gap:8px;}
-.price-left svg{width:22px;height:22px;flex-shrink:0;filter:drop-shadow(0 0 8px rgba(226,16,31,.8));}
-.price-amount{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:clamp(1.1rem, 3.5vw, 1.35rem);color:var(--silver);}
-.price-tag{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:clamp(1.1rem, 3.5vw, 1.35rem);color:var(--red-2);white-space:nowrap;}
-.price-tag span{font-size:.75rem;color:var(--silver-dim);margin-right:2px;}
-.best-badge{
-  position:absolute;top:0;left:0;
-  background:linear-gradient(135deg, #ffd700, #ffa500);
-  color:#1a0f00;font-size:.6rem;font-weight:800;
-  padding:3px 8px;border-radius:0 0 8px 0;
-  box-shadow:0 2px 10px rgba(255, 215, 0, 0.3);
-  letter-spacing:.3px;
-}
+    .loader-ring {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      border: 2px solid transparent;
+      border-top-color: var(--red);
+      border-right-color: var(--red-2);
+      animation: spin 1.2s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
+      filter: drop-shadow(0 0 12px var(--red-glow));
+    }
 
-/* ---------- PAYMENTS ---------- */
-.pay-strip{
-  display:flex;flex-wrap:wrap;gap:10px;justify-content:center;
-}
-.pay-chip{
-  display:flex;align-items:center;gap:8px;
-  background:var(--card);
-  border:1px solid var(--card-line);
-  padding:12px 18px;border-radius:10px;
-  font-weight:700;font-size:clamp(0.8rem, 2.5vw, 0.95rem);
-  backdrop-filter:blur(8px);
-  opacity:0;transform:translateY(15px);
-  transition:all .3s ease;
-}
-.pay-chip.in{opacity:1;transform:translateY(0);}
-.pay-chip:active, .pay-chip:hover{
-  border-color:var(--red);
-  transform:translateY(-3px);
-  box-shadow:0 8px 20px -5px rgba(226,16,31,0.4);
-}
-.pay-dot{width:8px;height:8px;border-radius:50%;background:var(--red-2);box-shadow:0 0 10px rgba(255,59,74,0.9);}
+    .loader-ring.r2 {
+      inset: 16px;
+      border-top-color: transparent;
+      border-bottom-color: var(--red-2);
+      border-left-color: var(--red);
+      animation: spin 1.8s linear infinite reverse;
+      opacity: 0.8;
+    }
 
-/* ---------- CONTACT ---------- */
-.contact-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
-  gap:12px;
-}
-@media(min-width:600px){
-  .contact-grid{ grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:20px; }
-}
-.contact-card{
-  background:var(--card);
-  border:1px solid var(--card-line);
-  border-radius:14px;
-  padding:20px 14px;
-  text-align:center;
-  text-decoration:none;
-  color:var(--silver);
-  backdrop-filter:blur(8px);
-  transition:all .3s ease;
-  opacity:0;transform:translateY(20px);
-}
-.contact-card.in{opacity:1;transform:translateY(0);}
-.contact-card:active, .contact-card:hover{
-  transform:translateY(-5px);
-  border-color:var(--red-2);
-  box-shadow:0 15px 35px -10px var(--red-glow);
-  background:rgba(28, 13, 17, 0.85);
-}
-.contact-icon{
-  width:42px;height:42px;margin:0 auto 12px;
-  display:flex;align-items:center;justify-content:center;
-  border-radius:50%;
-  background:radial-gradient(circle,rgba(226,16,31,.3),transparent 70%);
-  border:1px solid rgba(226,16,31,0.2);
-}
-.contact-icon svg{width:22px;height:22px;fill:var(--red-2);}
-.contact-label{font-weight:700;font-size:clamp(0.9rem, 2.5vw, 1.05rem);}
-.contact-sub{font-family:'Rajdhani',sans-serif;font-size:clamp(0.75rem, 2vw, 0.9rem);color:var(--silver-dim);margin-top:4px;word-break:break-all;}
+    .loader-logo {
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 700;
+      font-size: clamp(1.8rem, 5vw, 2.4rem);
+      letter-spacing: 3px;
+      color: var(--silver);
+      text-shadow: 0 0 20px rgba(226,16,31,0.9);
+      animation: pulse-text 1.4s ease-in-out infinite;
+    }
 
-/* ---------- FOOTER ---------- */
-footer{
-  position:relative;z-index:2;
-  text-align:center;padding:30px 5% 24px;
-  border-top:1px solid var(--card-line);
-  color:var(--silver-dim);font-size:.8rem;
-  background:rgba(4, 4, 6, 0.8);
-}
-footer .foot-brand{font-family:'Rajdhani',sans-serif;color:var(--red-2);font-weight:700;font-size:1.1rem;letter-spacing:2px;}
+    .loader-logo span { color: var(--red-2); }
 
-/* floating whatsapp */
-.float-wa{
-  position:fixed;bottom:20px;left:20px;z-index:50;
-  width:50px;height:50px;border-radius:50%;
-  background:linear-gradient(135deg,var(--red),var(--red-deep));
-  display:flex;align-items:center;justify-content:center;
-  box-shadow:0 8px 25px -5px rgba(226,16,31,.8);
-  border:1px solid var(--red-2);
-  animation:float 3.5s ease-in-out infinite;
-  text-decoration:none;
-}
-.float-wa svg{width:24px;height:24px;fill:#fff;}
+    .loader-pct {
+      position: absolute;
+      bottom: -38px;
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 0.9rem;
+      letter-spacing: 4px;
+      color: var(--silver-dim);
+    }
 
-/* ---------- MEDIA QUERIES FOR SMALL MOBILE ---------- */
-@media(max-width:480px){
-  header{padding:12px 4%;}
-  .header-badge{display:none;}
-  .hero-cta{flex-direction:column;width:100%;}
-  .btn{width:100%;}
-  .pass-card{padding:16px 18px;}
-  .float-wa{width:46px;height:46px;bottom:16px;left:16px;}
-}
-</style>
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes pulse-text { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+    /* ---------- Header ---------- */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 5%;
+      border-bottom: 1px solid var(--card-line);
+      background: rgba(5, 5, 8, 0.85);
+      backdrop-filter: blur(12px);
+    }
+
+    .brand { display: flex; align-items: center; gap: 10px; }
+    
+    .brand-mark {
+      width: 36px;
+      height: 36px;
+      position: relative;
+      filter: drop-shadow(0 0 10px rgba(226,16,31,.8));
+    }
+    .brand-mark svg { width: 100%; height: 100%; }
+
+    .brand-name {
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 700;
+      font-size: clamp(1.2rem, 4vw, 1.45rem);
+      letter-spacing: 1px;
+      color: var(--silver);
+    }
+    .brand-name span { color: var(--red-2); }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .header-badge {
+      font-size: 0.72rem;
+      letter-spacing: 1.5px;
+      color: var(--silver-dim);
+      border: 1px solid var(--card-line);
+      background: rgba(226,16,31,0.05);
+      padding: 6px 14px;
+      border-radius: 30px;
+      font-family: 'Rajdhani', sans-serif;
+      box-shadow: inset 0 0 10px rgba(226,16,31,0.1);
+    }
+
+    /* ---------- Admin Lock Button & Modal ---------- */
+    .admin-lock-btn {
+      background: rgba(226, 16, 31, 0.1);
+      border: 1px solid var(--card-line);
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .admin-lock-btn:hover {
+      background: var(--red);
+      border-color: var(--red-2);
+      box-shadow: 0 0 15px var(--red-glow);
+      transform: scale(1.05);
+    }
+
+    .admin-lock-btn svg {
+      width: 18px;
+      height: 18px;
+      fill: var(--silver);
+    }
+
+    .admin-modal-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 10000;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .admin-modal-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .admin-modal-box {
+      background: var(--card);
+      border: 1.5px solid var(--card-line);
+      border-radius: 16px;
+      padding: 28px;
+      width: 90%;
+      max-width: 380px;
+      text-align: center;
+      box-shadow: 0 20px 50px rgba(226, 16, 31, 0.3);
+      transform: scale(0.9);
+      transition: transform 0.3s ease;
+    }
+
+    .admin-modal-overlay.active .admin-modal-box {
+      transform: scale(1);
+    }
+
+    .admin-modal-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+      color: var(--silver);
+    }
+
+    .admin-input-group {
+      margin-bottom: 20px;
+    }
+
+    .admin-input-group input {
+      width: 100%;
+      padding: 12px 16px;
+      background: rgba(0, 0, 0, 0.5);
+      border: 1px solid var(--card-line);
+      border-radius: 8px;
+      color: #fff;
+      font-size: 1rem;
+      text-align: center;
+      outline: none;
+      letter-spacing: 2px;
+    }
+
+    .admin-input-group input:focus {
+      border-color: var(--red-2);
+      box-shadow: 0 0 10px var(--red-glow);
+    }
+
+    .admin-modal-btns {
+      display: flex;
+      gap: 10px;
+    }
+
+    .admin-btn-login {
+      flex: 1;
+      background: linear-gradient(135deg, var(--red), var(--red-deep));
+      color: #fff;
+      border: 1px solid var(--red-2);
+      padding: 10px;
+      border-radius: 8px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .admin-btn-cancel {
+      flex: 1;
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--silver-dim);
+      border: 1px solid var(--card-line);
+      padding: 10px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .error-msg {
+      color: #ff3b4a;
+      font-size: 0.85rem;
+      margin-top: 8px;
+      display: none;
+    }
+
+    /* ---------- Hero ---------- */
+    .hero {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding: clamp(40px, 8vw, 80px) 5% 40px;
+    }
+
+    .hero-ring-wrap {
+      position: relative;
+      width: clamp(130px, 35vw, 180px);
+      height: clamp(130px, 35vw, 180px);
+      margin: 0 auto 24px;
+    }
+
+    .hero-ring {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      border: 2px solid var(--red);
+      box-shadow: 0 0 25px var(--red-glow), inset 0 0 15px var(--red-glow);
+      animation: spin 12s linear infinite;
+    }
+
+    .hero-ring::before, .hero-ring::after {
+      content: "";
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--red-2);
+      box-shadow: 0 0 12px 4px rgba(255,59,74,1);
+    }
+    .hero-ring::before { top: -4px; left: 50%; transform: translateX(-50%); }
+    .hero-ring::after { bottom: -4px; right: 20%; }
+
+    .hero-diamond {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .hero-logo-img {
+      width: clamp(90px, 25vw, 130px);
+      height: clamp(90px, 25vw, 130px);
+      object-fit: cover;
+      border-radius: 50%;
+      border: 2px solid rgba(255, 59, 74, 0.4);
+      filter: drop-shadow(0 0 25px rgba(226,16,31,0.9));
+      animation: float 3.5s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-8px) scale(1.02); }
+    }
+
+    .hero h1 {
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 700;
+      font-size: clamp(1.8rem, 6vw, 4.2rem);
+      letter-spacing: 1px;
+      color: var(--silver);
+      text-shadow: 0 0 35px rgba(226,16,31,.5);
+      line-height: 1.2;
+    }
+
+    .hero h1 span {
+      background: linear-gradient(135deg, #fff, var(--red-2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero p.tag {
+      margin-top: 12px;
+      font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+      color: var(--silver-dim);
+      font-weight: 700;
+      padding: 0 10px;
+    }
+
+    .hero-cta {
+      margin-top: 28px;
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      font-family: 'Almarai', sans-serif;
+      font-weight: 700;
+      font-size: clamp(0.88rem, 2.5vw, 1rem);
+      padding: 13px 28px;
+      border-radius: 10px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      position: relative;
+      overflow: hidden;
+      width: auto;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--red), var(--red-deep));
+      color: #fff;
+      border: 1px solid var(--red-2);
+      box-shadow: 0 8px 25px -5px rgba(226,16,31,.7);
+    }
+
+    .btn-primary:active, .btn-primary:hover {
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 15px 35px -5px rgba(226,16,31,0.9);
+    }
+
+    .btn-ghost {
+      background: rgba(20, 10, 13, 0.6);
+      border: 1.5px solid var(--card-line);
+      color: var(--silver);
+      backdrop-filter: blur(5px);
+    }
+
+    .btn-ghost:active, .btn-ghost:hover {
+      border-color: var(--red-2);
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px -8px rgba(226,16,31,0.5);
+      color: #fff;
+    }
+
+    /* ---------- Section Titles ---------- */
+    .section {
+      position: relative;
+      z-index: 2;
+      padding: 40px 5%;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .section-head { text-align: center; margin-bottom: 32px; }
+
+    .section-eyebrow {
+      font-family: 'Rajdhani', sans-serif;
+      letter-spacing: 3px;
+      font-size: 0.8rem;
+      color: var(--red-2);
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .section-title {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: clamp(1.6rem, 5vw, 2.8rem);
+      font-weight: 700;
+      color: var(--silver);
+      margin-top: 4px;
+      text-shadow: 0 0 20px rgba(0,0,0,0.8);
+    }
+
+    /* ---------- Weekly Pass ---------- */
+    .pass-card {
+      max-width: 680px;
+      margin: 0 auto 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      background: linear-gradient(135deg, rgba(226,16,31,.22), rgba(20,10,13,.85));
+      border: 1.5px solid var(--red);
+      border-radius: 16px;
+      padding: 20px 24px;
+      box-shadow: 0 10px 40px -10px rgba(226,16,31,.6);
+      backdrop-filter: blur(10px);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      opacity: 0;
+      transform: translateY(20px);
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .pass-card.in { opacity: 1; transform: translateY(0); }
+
+    .pass-card:active, .pass-card:hover {
+      transform: translateY(-4px) scale(1.01);
+      box-shadow: 0 20px 50px -10px rgba(226,16,31,.8);
+    }
+
+    .pass-left { display: flex; align-items: center; gap: 12px; }
+    .pass-left svg { width: 38px; height: 38px; flex-shrink: 0; filter: drop-shadow(0 0 12px rgba(226,16,31,0.9)); }
+    .pass-title { font-weight: 800; font-size: clamp(1rem, 3vw, 1.2rem); color: var(--silver); }
+    .pass-sub { font-size: 0.8rem; color: var(--silver-dim); margin-top: 2px; }
+
+    .pass-price {
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 700;
+      font-size: clamp(1.8rem, 5vw, 2.3rem);
+      color: var(--red-2);
+      text-shadow: 0 0 20px rgba(226,16,31,.8);
+      white-space: nowrap;
+    }
+
+    .pass-price span { font-size: 0.9rem; color: var(--silver-dim); margin-right: 4px; }
+
+    /* ---------- Price Grid ---------- */
+    .price-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 12px;
+    }
+
+    @media(min-width: 480px) {
+      .price-grid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; }
+    }
+
+    @media(min-width: 768px) {
+      .price-grid { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px; }
+    }
+
+    .price-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--card);
+      border: 1px solid var(--card-line);
+      border-radius: 12px;
+      padding: 16px 14px;
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .price-card.in { opacity: 1; transform: translateY(0); }
+
+    .price-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, transparent, rgba(255,59,74,0.15), transparent);
+      transform: translateX(-100%);
+      transition: transform 0.7s ease;
+    }
+
+    .price-card:hover::before { transform: translateX(100%); }
+
+    .price-card:active, .price-card:hover {
+      border-color: var(--red-2);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 30px -8px var(--red-glow);
+      background: rgba(28, 13, 17, 0.85);
+    }
+
+    .price-left { display: flex; align-items: center; gap: 8px; }
+    .price-left svg { width: 22px; height: 22px; flex-shrink: 0; filter: drop-shadow(0 0 8px rgba(226,16,31,.8)); }
+    .price-amount { font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: clamp(1.1rem, 3.5vw, 1.35rem); color: var(--silver); }
+    .price-tag { font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: clamp(1.1rem, 3.5vw, 1.35rem); color: var(--red-2); white-space: nowrap; }
+    .price-tag span { font-size: 0.75rem; color: var(--silver-dim); margin-right: 2px; }
+
+    .best-badge {
+      position: absolute;
+      top: 0;
+      left: 0;
+      background: linear-gradient(135deg, #ffd700, #ffa500);
+      color: #1a0f00;
+      font-size: 0.6rem;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 0 0 8px 0;
+      box-shadow: 0 2px 10px rgba(255, 215, 0, 0.3);
+      letter-spacing: 0.3px;
+    }
+
+    /* ---------- Payments ---------- */
+    .pay-strip { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+
+    .pay-chip {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--card);
+      border: 1px solid var(--card-line);
+      padding: 12px 18px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: clamp(0.8rem, 2.5vw, 0.95rem);
+      backdrop-filter: blur(8px);
+      opacity: 0;
+      transform: translateY(15px);
+      transition: all 0.3s ease;
+    }
+
+    .pay-chip.in { opacity: 1; transform: translateY(0); }
+
+    .pay-chip:active, .pay-chip:hover {
+      border-color: var(--red);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px -5px rgba(226,16,31,0.4);
+    }
+
+    .pay-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--red-2); box-shadow: 0 0 10px rgba(255,59,74,0.9); }
+
+    /* ---------- Contact ---------- */
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 12px;
+    }
+
+    @media(min-width: 600px) {
+      .contact-grid { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; }
+    }
+
+    .contact-card {
+      background: var(--card);
+      border: 1px solid var(--card-line);
+      border-radius: 14px;
+      padding: 20px 14px;
+      text-align: center;
+      text-decoration: none;
+      color: var(--silver);
+      backdrop-filter: blur(8px);
+      transition: all 0.3s ease;
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    .contact-card.in { opacity: 1; transform: translateY(0); }
+
+    .contact-card:active, .contact-card:hover {
+      transform: translateY(-5px);
+      border-color: var(--red-2);
+      box-shadow: 0 15px 35px -10px var(--red-glow);
+      background: rgba(28, 13, 17, 0.85);
+    }
+
+    .contact-icon {
+      width: 42px;
+      height: 42px;
+      margin: 0 auto 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(226,16,31,.3), transparent 70%);
+      border: 1px solid rgba(226,16,31,0.2);
+    }
+
+    .contact-icon svg { width: 22px; height: 22px; fill: var(--red-2); }
+    .contact-label { font-weight: 700; font-size: clamp(0.9rem, 2.5vw, 1.05rem); }
+    .contact-sub { font-family: 'Rajdhani', sans-serif; font-size: clamp(0.75rem, 2vw, 0.9rem); color: var(--silver-dim); margin-top: 4px; word-break: break-all; }
+
+    /* ---------- Footer ---------- */
+    footer {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding: 30px 5% 24px;
+      border-top: 1px solid var(--card-line);
+      color: var(--silver-dim);
+      font-size: 0.8rem;
+      background: rgba(4, 4, 6, 0.8);
+    }
+
+    footer .foot-brand { font-family: 'Rajdhani', sans-serif; color: var(--red-2); font-weight: 700; font-size: 1.1rem; letter-spacing: 2px; }
+
+    .developer-credits {
+      margin-top: 14px;
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 1.8px;
+      color: rgba(241, 242, 245, 0.4);
+      text-transform: uppercase;
+    }
+
+    .developer-credits a {
+      color: var(--red-2);
+      text-decoration: none;
+      font-weight: 700;
+      transition: all 0.3s ease;
+      position: relative;
+      padding: 2px 4px;
+    }
+
+    .developer-credits a:hover {
+      color: #fff;
+      text-shadow: 0 0 10px var(--red-2);
+    }
+
+    /* Floating WhatsApp Button */
+    .float-wa {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      z-index: 50;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--red), var(--red-deep));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 25px -5px rgba(226,16,31,.8);
+      border: 1px solid var(--red-2);
+      animation: float 3.5s ease-in-out infinite;
+      text-decoration: none;
+    }
+
+    .float-wa svg { width: 24px; height: 24px; fill: #fff; }
+
+    /* ---------- Small Screens Adjustment ---------- */
+    @media(max-width: 480px) {
+      header { padding: 12px 4%; }
+      .header-badge { display: none; }
+      .hero-cta { flex-direction: column; width: 100%; }
+      .btn { width: 100%; }
+      .pass-card { padding: 16px 18px; }
+      .float-wa { width: 46px; height: 46px; bottom: 16px; left: 16px; }
+    }
+  </style>
 </head>
 <body>
 
@@ -448,7 +760,14 @@ footer .foot-brand{font-family:'Rajdhani',sans-serif;color:var(--red-2);font-wei
     </div>
     <div class="brand-name">TiV<span>A</span> STORE</div>
   </div>
-  <div class="header-badge eng">MOBILE LEGENDS · BANG BANG</div>
+  
+  <div class="header-right">
+    <div class="header-badge eng">MOBILE LEGENDS · BANG BANG</div>
+    <!-- زرار الأدمن -->
+    <button class="admin-lock-btn" onclick="openAdminModal()" title="لوحة التحكم">
+      <svg viewBox="0 0 24 24"><path d="M12 2a5 5 0 0 0-5 5v3H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2h-1V7a5 5 0 0 0-5-5zm-3 5a3 3 0 0 1 6 0v3H9V7zm3 6a1.5 1.5 0 0 1 1 1.41v2.09a1 1 0 0 1-2 0v-2.09A1.5 1.5 0 0 1 12 13z"/></svg>
+    </button>
+  </div>
 </header>
 
 <!-- HERO -->
@@ -462,7 +781,7 @@ footer .foot-brand{font-family:'Rajdhani',sans-serif;color:var(--red-2);font-wei
   <h1>شحـن <span>ألمـاس</span> Mobile Legends</h1>
   <p class="tag">شحن أسهل .. تجربة أفضل — أسعار منافسة وتنفيذ فوري</p>
   <div class="hero-cta">
-    <a class="btn btn-primary" href="https://wa.me/+201558371071" target="_blank">اطلب على واتساب</a>
+    <a id="heroWaBtn" class="btn btn-primary" href="#" target="_blank">اطلب على واتساب</a>
     <a class="btn btn-ghost" href="#prices">شوف الأسعار</a>
   </div>
 </section>
@@ -474,7 +793,7 @@ footer .foot-brand{font-family:'Rajdhani',sans-serif;color:var(--red-2);font-wei
     <div class="section-title">قائمة أسعار الدايموندز</div>
   </div>
 
-  <a class="pass-card" id="passCard" href="https://wa.me/+201558371071?text=السلام%20علكم%20عاوز%20أشحن%20Weekly%20Diamond%20Pass%20بسعر%2080%20EGP" target="_blank">
+  <a class="pass-card" id="passCard" href="#" target="_blank">
     <div class="pass-left">
       <svg viewBox="0 0 24 24"><path d="M12 2l6 6-6 14-6-14 6-6z" fill="#e2101f"/><path d="M12 2l6 6h-12l6-6z" fill="#ff3b4a"/></svg>
       <div>
@@ -482,11 +801,11 @@ footer .foot-brand{font-family:'Rajdhani',sans-serif;color:var(--red-2);font-wei
         <div class="pass-sub">باقة الألماس الأسبوعية</div>
       </div>
     </div>
-    <div class="pass-price">80<span>EGP</span></div>
+    <div class="pass-price" id="passPriceDisplay">80<span>EGP</span></div>
   </a>
 
   <div class="price-grid" id="priceGrid">
-    <!-- cards injected by JS -->
+    <!-- Cards Injected via JS -->
   </div>
 </section>
 
@@ -512,10 +831,10 @@ footer .foot-brand{font-family:'Rajdhani',sans-serif;color:var(--red-2);font-wei
     <div class="section-title">تواصل معنا</div>
   </div>
   <div class="contact-grid" id="contactGrid">
-    <a class="contact-card" href="https://wa.me/+201558371071" target="_blank">
+    <a class="contact-card" id="contactWaCard" href="#" target="_blank">
       <div class="contact-icon"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18a8 8 0 0 1-4.1-1.1l-.3-.2-3 .8.8-2.9-.2-.3A8 8 0 1 1 12 20zm4.4-5.9c-.2-.1-1.4-.7-1.6-.8-.2-.1-.4-.1-.5.1-.2.2-.6.8-.7.9-.1.2-.3.2-.5.1-.2-.1-1-.4-1.9-1.2-.7-.6-1.2-1.4-1.3-1.6-.1-.2 0-.4.1-.5l.4-.5c.1-.1.1-.2.2-.4 0-.1 0-.3 0-.4-.1-.1-.5-1.3-.7-1.8-.2-.5-.4-.4-.5-.4h-.5c-.2 0-.4.1-.6.3-.2.2-.8.8-.8 1.9 0 1.1.8 2.2 1 2.3.1.2 1.6 2.4 3.8 3.4.5.2 1 .4 1.3.5.5.2 1 .1 1.4 0 .4-.1 1.4-.6 1.6-1.1.2-.5.2-1 .1-1.1z"/></svg></div>
       <div class="contact-label">WhatsApp</div>
-      <div class="contact-sub eng">01558371071+</div>
+      <div class="contact-sub eng" id="contactPhoneDisplay">+201558371071</div>
     </a>
     <a class="contact-card" href="https://www.instagram.com/tiva_ko1?igsh=ZmU2bDc0NmdlZHlt&igsi=ZmU2bDc0NmdlZHlt" target="_blank">
       <div class="contact-icon">
@@ -539,107 +858,181 @@ footer .foot-brand{font-family:'Rajdhani',sans-serif;color:var(--red-2);font-wei
   </div>
 </section>
 
-<a class="float-wa" href="https://wa.me/+201558371071" target="_blank" aria-label="WhatsApp">
+<!-- Modal Admin Password -->
+<div class="admin-modal-overlay" id="adminModal">
+  <div class="admin-modal-box">
+    <div class="admin-modal-title">دخول لوحة التحكم 🔒</div>
+    <div class="admin-input-group">
+      <input type="password" id="adminPassInput" placeholder="أدخل كلمة السر" onkeypress="handlePassEnter(event)">
+      <div class="error-msg" id="passError">كلمة السر غير صحيحة!</div>
+    </div>
+    <div class="admin-modal-btns">
+      <button class="admin-btn-login" onclick="checkAdminPassword()">دخول</button>
+      <button class="admin-btn-cancel" onclick="closeAdminModal()">إلغاء</button>
+    </div>
+  </div>
+</div>
+
+<!-- Floating WhatsApp Link -->
+<a class="float-wa" id="floatWaBtn" href="#" target="_blank" aria-label="WhatsApp">
   <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18a8 8 0 0 1-4.1-1.1l-.3-.2-3 .8.8-2.9-.2-.3A8 8 0 1 1 12 20zm4.4-5.9c-.2-.1-1.4-.7-1.6-.8-.2-.1-.4-.1-.5.1-.2.2-.6.8-.7.9-.1.2-.3.2-.5.1-.2-.1-1-.4-1.9-1.2-.7-.6-1.2-1.4-1.3-1.6-.1-.2 0-.4.1-.5l.4-.5c.1-.1.1-.2.2-.4 0-.1 0-.3 0-.4-.1-.1-.5-1.3-.7-1.8-.2-.5-.4-.4-.5-.4h-.5c-.2 0-.4.1-.6.3-.2.2-.8.8-.8 1.9 0 1.1.8 2.2 1 2.3.1.2 1.6 2.4 3.8 3.4.5.2 1 .4 1.3.5.5.2 1 .1 1.4 0 .4-.1 1.4-.6 1.6-1.1.2-.5.2-1 .1-1.1z"/></svg>
 </a>
 
 <footer>
   <div class="foot-brand">TiVA STORE</div>
   <p style="margin-top:8px;">© 2026 جميع الحقوق محفوظة — شحن ألعاب موبايل ليجندز</p>
+  
+  <!-- حقوق المطور -->
+  <div class="developer-credits">
+    ENGINEERED AND CODED BY <a href="https://wa.me/201551447487" target="_blank">NOUR</a>
+  </div>
 </footer>
 
 <script>
-// ---- price data ----
-const prices = [
-  {d:86, p:70},
-  {d:172, p:135},
-  {d:257, p:200},
-  {d:343, p:270},
-  {d:514, p:405},
-  {d:706, p:555},
-  {d:1050, p:820},
-  {d:1670, p:1290},
-  {d:2195, p:1650, best:true},
-  {d:4032, p:3005}
-];
+  // ---- Admin Auth Logic (تم الربط الديناميكي مع localStorage) ----
+  const ADMIN_PASSWORD = localStorage.getItem('tiva_admin_password') || "tiva123";
 
-const phone = "+201558371071";
-const diamondSVG = `<svg viewBox="0 0 24 24"><path d="M12 2l6 6-6 14-6-14 6-6z" fill="#e2101f"/><path d="M12 2l6 6h-12l6-6z" fill="#ff3b4a"/></svg>`;
+  function openAdminModal() {
+    document.getElementById('adminModal').classList.add('active');
+    document.getElementById('adminPassInput').focus();
+  }
 
-const grid = document.getElementById('priceGrid');
-grid.innerHTML = prices.map(item => {
-  const msg = encodeURIComponent(`السلام عليكم، محتاج أشحن ${item.d.toLocaleString()} ألماس بسعر ${item.p.toLocaleString()} EGP`);
-  const waUrl = `https://wa.me/${phone}?text=${msg}`;
-  return `
-    <a class="price-card" href="${waUrl}" target="_blank">
-      ${item.best ? '<div class="best-badge">الأكثر طلبًا</div>' : ''}
-      <div class="price-left">
-        ${diamondSVG}
-        <div class="price-amount num">${item.d.toLocaleString()}</div>
-      </div>
-      <div class="price-tag num">${item.p.toLocaleString()}<span>EGP</span></div>
-    </a>
-  `;
-}).join('');
+  function closeAdminModal() {
+    document.getElementById('adminModal').classList.remove('active');
+    document.getElementById('adminPassInput').value = '';
+    document.getElementById('passError').style.display = 'none';
+  }
 
-// ---- reveal on scroll ----
-const revealTargets = document.querySelectorAll('.price-card, .pay-chip, .contact-card, .pass-card');
-const io = new IntersectionObserver((entries)=>{
-  entries.forEach((entry,i)=>{
-    if(entry.isIntersecting){
-      setTimeout(()=> entry.target.classList.add('in'), i*30);
-      io.unobserve(entry.target);
+  function checkAdminPassword() {
+    const inputPass = document.getElementById('adminPassInput').value;
+    const errorMsg = document.getElementById('passError');
+
+    if (inputPass === ADMIN_PASSWORD) {
+      sessionStorage.setItem('tiva_admin_auth', 'true');
+      window.location.href = 'admin.html';
+    } else {
+      errorMsg.style.display = 'block';
+    }
+  }
+
+  function handlePassEnter(e) {
+    if (e.key === 'Enter') {
+      checkAdminPassword();
+    }
+  }
+
+  // ---- Default Price & Phone Data ----
+  const defaultPrices = [
+    {d: 86, p: 70},
+    {d: 172, p: 135},
+    {d: 257, p: 200},
+    {d: 343, p: 270},
+    {d: 514, p: 405},
+    {d: 706, p: 555},
+    {d: 1050, p: 820},
+    {d: 1670, p: 1290},
+    {d: 2195, p: 1650, best: true},
+    {d: 4032, p: 3005}
+  ];
+
+  // Sync data with LocalStorage (Admin Dashboard)
+  const prices = JSON.parse(localStorage.getItem('tiva_prices')) || defaultPrices;
+  const phone = localStorage.getItem('tiva_phone') || "+201558371071";
+
+  // Dynamic Phone Number Links Integration
+  const waBaseUrl = `https://wa.me/${phone}`;
+  document.getElementById('heroWaBtn').href = waBaseUrl;
+  document.getElementById('floatWaBtn').href = waBaseUrl;
+  document.getElementById('contactWaCard').href = waBaseUrl;
+  document.getElementById('contactPhoneDisplay').textContent = phone;
+
+  // Weekly Diamond Pass Setup
+  const passPrice = localStorage.getItem('tiva_pass_price') || 80;
+  document.getElementById('passPriceDisplay').innerHTML = `${passPrice}<span>EGP</span>`;
+  document.getElementById('passCard').href = `${waBaseUrl}?text=${encodeURIComponent(`السلام عليكم، عاوز أشحن Weekly Diamond Pass بسعر ${passPrice} EGP`)}`;
+
+  // Render Diamond Price Cards
+  const diamondSVG = `<svg viewBox="0 0 24 24"><path d="M12 2l6 6-6 14-6-14 6-6z" fill="#e2101f"/><path d="M12 2l6 6h-12l6-6z" fill="#ff3b4a"/></svg>`;
+  const grid = document.getElementById('priceGrid');
+
+  grid.innerHTML = prices.map(item => {
+    const msg = encodeURIComponent(`السلام عليكم، محتاج أشحن ${item.d.toLocaleString()} ألماس بسعر ${item.p.toLocaleString()} EGP`);
+    const waUrl = `${waBaseUrl}?text=${msg}`;
+    return `
+      <a class="price-card" href="${waUrl}" target="_blank">
+        ${item.best ? '<div class="best-badge">الأكثر طلبًا</div>' : ''}
+        <div class="price-left">
+          ${diamondSVG}
+          <div class="price-amount num">${item.d.toLocaleString()}</div>
+        </div>
+        <div class="price-tag num">${item.p.toLocaleString()}<span>EGP</span></div>
+      </a>
+    `;
+  }).join('');
+
+  // Reveal elements on scroll
+  const revealTargets = document.querySelectorAll('.price-card, .pay-chip, .contact-card, .pass-card');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('in'), i * 30);
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  revealTargets.forEach(el => io.observe(el));
+
+  // Loader Script
+  const loader = document.getElementById('loader');
+  const pct = document.getElementById('loaderPct');
+  let p = 0;
+  const interval = setInterval(() => {
+    p += Math.floor(Math.random() * 12) + 4;
+    if (p >= 100) {
+      p = 100;
+      clearInterval(interval);
+    }
+    pct.textContent = p + '%';
+  }, 100);
+
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      loader.classList.add('hide');
+    }, 1000);
+  });
+</script>
+
+<script>
+  // Anti-Inspect Protection (Desktop Only)
+  const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+  document.addEventListener('contextmenu', function (e) {
+    e.preventDefault();
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (
+      e.key === 'F12' ||
+      (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j' || e.key === 'C' || e.key === 'c')) ||
+      (e.ctrlKey && (e.key === 'U' || e.key === 'u' || e.key === 'S' || e.key === 's'))
+    ) {
+      e.preventDefault();
+      return false;
     }
   });
-},{threshold:.1});
-revealTargets.forEach(el=>io.observe(el));
 
-// ---- loader ----
-const loader = document.getElementById('loader');
-const pct = document.getElementById('loaderPct');
-let p = 0;
-const interval = setInterval(()=>{
-  p += Math.floor(Math.random()*12)+4;
-  if(p>=100){p=100; clearInterval(interval);}
-  pct.textContent = p + '%';
-},100);
-
-window.addEventListener('load', ()=>{
-  setTimeout(()=>{
-    loader.classList.add('hide');
-  }, 1000);
-});
+  if (!isMobile) {
+    setInterval(function () {
+      const threshold = 160;
+      const widthThreshold = window.outerWidth - window.innerWidth > threshold;
+      const heightThreshold = window.outerHeight - window.innerHeight > threshold;
+      
+      if (widthThreshold || heightThreshold) {
+        document.body.innerHTML = '<h1 style="color:white; text-align:center; margin-top:20vh;">Inspect element is disabled on this website.</h1>';
+      }
+    }, 1000);
+  }
 </script>
-<script>
-        // Anti-Inspect for Desktop Only
-        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
-        document.addEventListener('contextmenu', function (e) {
-            e.preventDefault();
-        });
-
-        document.addEventListener('keydown', function (e) {
-            if (
-                e.key === 'F12' ||
-                (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j' || e.key === 'C' || e.key === 'c')) ||
-                (e.ctrlKey && (e.key === 'U' || e.key === 'u' || e.key === 'S' || e.key === 's'))
-            ) {
-                e.preventDefault();
-                return false;
-            }
-        });
-
-        if (!isMobile) {
-            setInterval(function () {
-                const threshold = 160;
-                const widthThreshold = window.outerWidth - window.innerWidth > threshold;
-                const heightThreshold = window.outerHeight - window.innerHeight > threshold;
-                
-                if (widthThreshold || heightThreshold) {
-                    document.body.innerHTML = '<h1 style="color:white; text-align:center; margin-top:20vh;">Inspect element is disabled on this website.</h1>';
-                }
-            }, 1000);
-        }
-    </script>
 </body>
 </html>
